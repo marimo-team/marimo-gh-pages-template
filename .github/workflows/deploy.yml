@@ -11,7 +11,7 @@ on:
 
 # Concurrency settings to manage multiple workflow runs
 concurrency:
-  group: 'pages'        # Only one workflow in the 'pages' group can run at a time
+  group: 'pages'             # Only one workflow in the 'pages' group can run at a time
   cancel-in-progress: false  # Don't cancel in-progress runs when a new one is triggered
 
 # Environment variables used by the workflow
@@ -63,12 +63,12 @@ jobs:
 
     # Configure the deployment environment
     environment:
-      name: github-pages  # Deploy to the github-pages environment
+      name: github-pages                             # Deploy to the github-pages environment
       url: ${{ steps.deployment.outputs.page_url }}  # Use the URL from the deployment step
 
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
     steps:
       # Deploy the site to GitHub Pages using the official action
       - name: 🚀 Deploy to GitHub Pages
-        id: deployment  # ID used to reference this step's outputs
+        id: deployment                 # ID used to reference this step's outputs
         uses: actions/deploy-pages@v4  # GitHub's official Pages deployment action
