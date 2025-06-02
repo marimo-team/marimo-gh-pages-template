@@ -58,6 +58,7 @@ def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) 
         cmd.extend([notebook_path, "-o", output_file])
 
         # Run marimo export command
+        print(cmd)
         subprocess.run(cmd, capture_output=True, text=True, check=True)
         return True
     except subprocess.CalledProcessError as e:
