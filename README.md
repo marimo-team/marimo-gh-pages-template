@@ -37,10 +37,10 @@ df = pl.read_csv(mo.notebook_location() / "public" / "penguins.csv")
 
 ## 🧪 Testing
 
-To test the export process, run `scripts/build.py` from the root directory.
+To test the export process, run `.github/scripts/build.py` from the root directory.
 
 ```bash
-python scripts/build.py
+python .github/scripts/build.py
 ```
 
 This will export all notebooks in a folder called `_site/` in the root directory. Then to serve the site, run:
