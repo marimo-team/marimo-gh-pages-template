@@ -1,0 +1,7 @@
+marimo==0.13.15
+numpy==2.2.6
+altair==5.5.0
+polars==1.30.0
+pandas==2.2.3
+plotly==6.1.2
+pyarrow==20.0.0

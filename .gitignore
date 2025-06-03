@@ -1,4 +1,5 @@
 _site/
+__marimo__
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
