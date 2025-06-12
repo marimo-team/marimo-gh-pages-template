@@ -95,7 +95,7 @@ jobs:
 
       - name: Display index
         run: |
-          cat _site/notebooks/index.html
+          cat _site/index.html
 
       # Upload the generated site as an artifact for the deploy job
       - name: 📤 Upload artifact
