@@ -7,7 +7,6 @@
     ":pinVersions"
   ],
   "enabledManagers": [
-    	"pip_requirements",
-	"github-actions"
+    "github-actions"
   ]
 }

@@ -26,17 +26,31 @@ jobs:
       # Check out the repository code
       - uses: actions/checkout@v4
 
-      - name: Run the dryrun command
+      # Install uv package manager for faster Python package installation
+      - name: 🚀 Install uv
+        uses: astral-sh/setup-uv@v6
+
+      # Set up Python environment
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12  # Use Python 3.12 for the build
+
+      # Install marimo and other required dependencies
+      - name: 📦 Install dependencies
         run: |
-          make dryrun
+          uv pip install marimo
+
+      # Run the build script to export notebooks to WebAssembly
+      - name: 🛠️ Export notebooks
+        run: |
+          python .github/scripts/build.py  # This script exports all notebooks to the _site directory
 
       # Upload the generated site as an artifact for the deploy job
       - name: 📤 Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site  # Directory containing the built site
-
-
 
   # The deploy job publishes the built site to GitHub Pages
   deploy:
@@ -58,7 +72,3 @@ jobs:
       - name: 🚀 Deploy to GitHub Pages
         id: deployment                 # ID used to reference this step's outputs
         uses: actions/deploy-pages@v4  # GitHub's official Pages deployment action
-
-      - name: Display address
-        run: |
-          echo ${{ steps.deployment.outputs.page_url }}

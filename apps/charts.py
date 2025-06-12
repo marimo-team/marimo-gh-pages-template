@@ -1,26 +1,20 @@
-# /// script
-# requires-python = ">=3.12"
-# dependencies = [
-#     "marimo==0.13.15",
-#     "altair==4.2.0",
-#     "pandas==2.3.0",
-#     "numpy==2.3.0"
-# ]
-# ///
 import marimo
 
 __generated_with = "0.10.9"
 app = marimo.App(width="medium")
 
-with app.setup:
+
+@app.cell
+def _():
     import numpy as np
     import altair as alt
     import pandas as pd
     import marimo as mo
+    return alt, mo, np, pd
 
 
 @app.cell
-def _():
+def _(mo):
     mo.md(
         """
         # Interactive Data Visualization
@@ -35,7 +29,7 @@ def _():
 
 
 @app.cell
-def _():
+def _(alt, mo, np, pd):
     # Create sample data
     data = pd.DataFrame({"x": np.arange(100), "y": np.random.normal(0, 1, 100)})
 
@@ -49,7 +43,7 @@ def _():
         )
     )
     chart
-    return chart
+    return chart, data
 
 
 @app.cell
