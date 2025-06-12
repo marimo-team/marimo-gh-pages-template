@@ -117,3 +117,7 @@ jobs:
       - name: 🚀 Deploy to GitHub Pages
         id: deployment                 # ID used to reference this step's outputs
         uses: actions/deploy-pages@v4  # GitHub's official Pages deployment action
+
+      - name: Display address
+        run: |
+          echo ${{ steps.deployment.outputs.page_url }}
