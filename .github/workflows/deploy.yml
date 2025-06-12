@@ -82,6 +82,17 @@ jobs:
         with:
           path: _site  # Directory containing the built site
 
+      - name: List of notebooks using ls
+        id: list
+        run: |
+          echo "Subfolders of _site/notebooks:"
+          for entry in _site/notebooks/*; do
+            if [ -d "$entry" ]; then
+              echo "$(basename "$entry")"
+            fi
+          done > subfolders.txt
+          cat subfolders.txt
+
   # The deploy job publishes the built site to GitHub Pages
   deploy:
     needs: build  # This job depends on the build job completing successfully
