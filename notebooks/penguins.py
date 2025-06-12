@@ -4,6 +4,7 @@
 #     "marimo==0.13.15",
 #     "polars==1.30.0",
 #     "altair==4.2.0",
+#     "pandas==2.3.0",
 # ]
 # ///
 import marimo
@@ -15,6 +16,7 @@ with app.setup:
     import marimo as mo
     import polars as pl
     import altair as alt
+    import pandas as pd
 
     file = mo.notebook_location() / "public" / "penguins.csv"
 
@@ -37,6 +39,11 @@ def _():
     df.head()
     return (df,)
 
+@app.cell
+def _():
+    # Try to avoid reading the file with pandas
+    _df = pd.read_csv(str(file))
+    return
 
 @app.cell
 def _(df):

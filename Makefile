@@ -16,9 +16,10 @@ help:  ## Display this help screen
 # Install and run Marimo for interactive notebooks
 .PHONY: notebooks
 notebooks: uv ## Install Marimo and start server to edit marimo notebooks
-	@uvx marimo edit --sandbox notebooks/$(NOTEBOOK).
+	@uvx marimo export html-wasm --sandbox notebooks/$(NOTEBOOK) --mode edit -o tmp/index.html
 
 # Install and run Marimo for interactive notebooks
 .PHONY: apps
 apps: uv ## Install Marimo and start server to edit marimo notebooks
-	@uvx marimo edit --sandbox apps/$(APPS).
+	@uvx marimo export html-wasm --sandbox apps/$(APPS) --mode run --no-show-code -o tmp/index.html
+
