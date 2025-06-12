@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>marimo WebAssembly + GitHub Pages Template</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --primary-color: #4a86e8;
+      --secondary-color: #ff9900;
+      --background-color: #f9f9f9;
+      --card-background: #ffffff;
+      --text-color: #333333;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--background-color);
+      padding: 0;
+      margin: 0;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    header {
+      background: linear-gradient(135deg, var(--primary-color), #2a5db0);
+      color: white;
+      padding: 2rem 0;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .header-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo {
+      width: 120px;
+      height: auto;
+      margin-bottom: 1rem;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .badges {
+      margin: 1rem 0;
+    }
+    .badges img {
+      margin: 0 5px;
+    }
+    .section-title {
+      font-size: 2rem;
+      margin: 2rem 0 1rem;
+      color: var(--primary-color);
+      text-align: center;
+      position: relative;
+    }
+    .section-title::after {
+      content: "";
+      display: block;
+      width: 50px;
+      height: 3px;
+      background-color: var(--secondary-color);
+      margin: 0.5rem auto;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .card {
+      background-color: var(--card-background);
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+    .card-header {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+    }
+    .card-header.app {
+      background-color: var(--secondary-color);
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+    .card-description {
+      margin-bottom: 1.5rem;
+      color: #666;
+    }
+    .card-link {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.5rem 1rem;
+      text-decoration: none;
+      border-radius: 4px;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+    .card-link.app {
+      background-color: var(--secondary-color);
+    }
+    .card-link:hover {
+      background-color: #2a5db0;
+    }
+    .card-link.app:hover {
+      background-color: #e08800;
+    }
+    footer {
+      background-color: #333;
+      color: white;
+      text-align: center;
+      padding: 2rem 0;
+      margin-top: 3rem;
+    }
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .footer-links {
+      margin: 1rem 0;
+    }
+    .footer-links a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    .footer-links a:hover {
+      text-decoration: underline;
+    }
+    @media (max-width: 768px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 2rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container header-content">
+      <img src="assets/logo.png" alt="marimo Logo" class="logo">
+      <h1>🚀 marimo WebAssembly + GitHub Pages Template</h1>
+      <p class="subtitle">Interactive Python notebooks exported to WebAssembly and deployed to GitHub Pages</p>
+      <div class="badges">
+        <img src="https://img.shields.io/badge/python-3.12+-blue.svg" alt="Python 3.12+">
+        <img src="https://img.shields.io/badge/marimo-0.13.15+-orange.svg" alt="Marimo">
+        <img src="https://img.shields.io/badge/GitHub%20Pages-Deployed-green?logo=github" alt="GitHub Pages">
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <h2 class="section-title"><i class="fas fa-book"></i> Notebooks</h2>
+    <p style="text-align: center;">Interactive notebooks in edit mode - you can modify and experiment with the code</p>
+    <div class="cards">
+
+      <!-- Fibonacci Notebook -->
+      <div class="card">
+        <div class="card-header">fibonacci</div>
+        <div class="card-body">
+          <p class="card-description">Interactive Fibonacci sequence calculator with a slider to adjust the number of sequence elements.</p>
+          <a href="notebooks/fibonacci/index.html" class="card-link">Open Notebook <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <!-- Penguins Notebook -->
+      <div class="card">
+        <div class="card-header">penguins</div>
+        <div class="card-body">
+          <p class="card-description">Interactive data analysis of the Palmer Penguins dataset using Polars and marimo.</p>
+          <a href="notebooks/penguins/index.html" class="card-link">Open Notebook <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+    </div>
+
+    <h2 class="section-title"><i class="fas fa-chart-line"></i> Apps</h2>
+    <p style="text-align: center;">Interactive applications in run mode - code is hidden for a clean user interface</p>
+    <div class="cards">
+
+      <!-- Charts App -->
+      <div class="card">
+        <div class="card-header app">charts</div>
+        <div class="card-body">
+          <p class="card-description">Interactive data visualization dashboard with Altair charts.</p>
+          <a href="apps/charts/index.html" class="card-link app">Open App <i class="fas fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-content">
+      <p>Built with <a href="https://marimo.io" target="_blank" style="color: #ff9900;">marimo</a> - Interactive Python notebooks</p>
+      <div class="footer-links">
+        <a href="https://github.com/marimo-team/marimo" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+        <a href="https://docs.marimo.io" target="_blank"><i class="fas fa-book"></i> Documentation</a>
+        <a href="https://discord.gg/JE7nhX6mD8" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+      </div>
+      <p>Licensed under <a href="https://github.com/marimo-team/marimo/blob/main/LICENSE" target="_blank" style="color: #4a86e8;">Apache License 2.0</a></p>
+    </div>
+  </footer>
+
+</body>
+</html>
