@@ -43,7 +43,7 @@ jobs:
             echo "Exporting $notebook to HTML-WASM..."
 
             mkdir -p _site/notebooks/$filename
-            
+
             # Export in edit mode to allow users to modify the notebook
             uvx marimo export html-wasm --sandbox $notebook -o _site/notebooks/$filename/index.html --mode edit
           done
@@ -61,39 +61,297 @@ jobs:
             echo "Exporting $notebook to HTML-WASM..."
 
             mkdir -p _site/apps/$filename
-            
+
             # Export in edit mode to allow users to modify the notebook
             uvx marimo export html-wasm --sandbox $notebook -o _site/apps/$filename/index.html --mode run --no-show-code
           done
-          
+
 
       # Run the build script to export notebooks to WebAssembly
       - name: 🛠️ Check notebooks
         run: |
           tree _site
 
+      - name: Copy logo for index.html
+        run: |
+          mkdir -p _site/assets
+          cp apps/public/logo.png _site/assets/logo.png
+
       - name: Generate index.html
         run: |
           {
-            echo "<!DOCTYPE html>"
-            echo "<html><head><meta charset='UTF-8'><title>Index</title></head><body>"
-            
-            echo "<h1>Notebooks</h1><ul>"
+            echo '<!DOCTYPE html>'
+            echo '<html lang="en">'
+            echo '<head>'
+            echo '  <meta charset="UTF-8">'
+            echo '  <meta name="viewport" content="width=device-width, initial-scale=1.0">'
+            echo '  <title>marimo WebAssembly + GitHub Pages Template</title>'
+            echo '  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">'
+            echo '  <style>'
+            echo '    :root {'
+            echo '      --primary-color: #4a86e8;'
+            echo '      --secondary-color: #ff9900;'
+            echo '      --background-color: #f9f9f9;'
+            echo '      --card-background: #ffffff;'
+            echo '      --text-color: #333333;'
+            echo '      --border-radius: 8px;'
+            echo '      --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);'
+            echo '    }'
+            echo '    * {'
+            echo '      box-sizing: border-box;'
+            echo '      margin: 0;'
+            echo '      padding: 0;'
+            echo '    }'
+            echo '    body {'
+            echo '      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;'
+            echo '      line-height: 1.6;'
+            echo '      color: var(--text-color);'
+            echo '      background-color: var(--background-color);'
+            echo '      padding: 0;'
+            echo '      margin: 0;'
+            echo '    }'
+            echo '    .container {'
+            echo '      max-width: 1200px;'
+            echo '      margin: 0 auto;'
+            echo '      padding: 0 20px;'
+            echo '    }'
+            echo '    header {'
+            echo '      background: linear-gradient(135deg, var(--primary-color), #2a5db0);'
+            echo '      color: white;'
+            echo '      padding: 2rem 0;'
+            echo '      text-align: center;'
+            echo '      margin-bottom: 2rem;'
+            echo '    }'
+            echo '    .header-content {'
+            echo '      display: flex;'
+            echo '      flex-direction: column;'
+            echo '      align-items: center;'
+            echo '      justify-content: center;'
+            echo '    }'
+            echo '    .logo {'
+            echo '      width: 120px;'
+            echo '      height: auto;'
+            echo '      margin-bottom: 1rem;'
+            echo '    }'
+            echo '    h1 {'
+            echo '      font-size: 2.5rem;'
+            echo '      margin-bottom: 0.5rem;'
+            echo '    }'
+            echo '    .subtitle {'
+            echo '      font-size: 1.2rem;'
+            echo '      opacity: 0.9;'
+            echo '      max-width: 800px;'
+            echo '      margin: 0 auto;'
+            echo '    }'
+            echo '    .badges {'
+            echo '      margin: 1rem 0;'
+            echo '    }'
+            echo '    .badges img {'
+            echo '      margin: 0 5px;'
+            echo '    }'
+            echo '    .section-title {'
+            echo '      font-size: 2rem;'
+            echo '      margin: 2rem 0 1rem;'
+            echo '      color: var(--primary-color);'
+            echo '      text-align: center;'
+            echo '      position: relative;'
+            echo '    }'
+            echo '    .section-title::after {'
+            echo '      content: "";'
+            echo '      display: block;'
+            echo '      width: 50px;'
+            echo '      height: 3px;'
+            echo '      background-color: var(--secondary-color);'
+            echo '      margin: 0.5rem auto;'
+            echo '    }'
+            echo '    .cards {'
+            echo '      display: grid;'
+            echo '      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));'
+            echo '      gap: 2rem;'
+            echo '      margin: 2rem 0;'
+            echo '    }'
+            echo '    .card {'
+            echo '      background-color: var(--card-background);'
+            echo '      border-radius: var(--border-radius);'
+            echo '      box-shadow: var(--box-shadow);'
+            echo '      overflow: hidden;'
+            echo '      transition: transform 0.3s ease, box-shadow 0.3s ease;'
+            echo '    }'
+            echo '    .card:hover {'
+            echo '      transform: translateY(-5px);'
+            echo '      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);'
+            echo '    }'
+            echo '    .card-header {'
+            echo '      background-color: var(--primary-color);'
+            echo '      color: white;'
+            echo '      padding: 1rem;'
+            echo '      font-size: 1.2rem;'
+            echo '      font-weight: bold;'
+            echo '    }'
+            echo '    .card-header.app {'
+            echo '      background-color: var(--secondary-color);'
+            echo '    }'
+            echo '    .card-body {'
+            echo '      padding: 1.5rem;'
+            echo '    }'
+            echo '    .card-description {'
+            echo '      margin-bottom: 1.5rem;'
+            echo '      color: #666;'
+            echo '    }'
+            echo '    .card-link {'
+            echo '      display: inline-block;'
+            echo '      background-color: var(--primary-color);'
+            echo '      color: white;'
+            echo '      padding: 0.5rem 1rem;'
+            echo '      text-decoration: none;'
+            echo '      border-radius: 4px;'
+            echo '      font-weight: bold;'
+            echo '      transition: background-color 0.3s ease;'
+            echo '    }'
+            echo '    .card-link.app {'
+            echo '      background-color: var(--secondary-color);'
+            echo '    }'
+            echo '    .card-link:hover {'
+            echo '      background-color: #2a5db0;'
+            echo '    }'
+            echo '    .card-link.app:hover {'
+            echo '      background-color: #e08800;'
+            echo '    }'
+            echo '    footer {'
+            echo '      background-color: #333;'
+            echo '      color: white;'
+            echo '      text-align: center;'
+            echo '      padding: 2rem 0;'
+            echo '      margin-top: 3rem;'
+            echo '    }'
+            echo '    .footer-content {'
+            echo '      max-width: 800px;'
+            echo '      margin: 0 auto;'
+            echo '    }'
+            echo '    .footer-links {'
+            echo '      margin: 1rem 0;'
+            echo '    }'
+            echo '    .footer-links a {'
+            echo '      color: white;'
+            echo '      margin: 0 10px;'
+            echo '      text-decoration: none;'
+            echo '    }'
+            echo '    .footer-links a:hover {'
+            echo '      text-decoration: underline;'
+            echo '    }'
+            echo '    @media (max-width: 768px) {'
+            echo '      .cards {'
+            echo '        grid-template-columns: 1fr;'
+            echo '      }'
+            echo '      h1 {'
+            echo '        font-size: 2rem;'
+            echo '      }'
+            echo '      .subtitle {'
+            echo '        font-size: 1rem;'
+            echo '      }'
+            echo '    }'
+            echo '  </style>'
+            echo '</head>'
+            echo '<body>'
+            echo '  <header>'
+            echo '    <div class="container header-content">'
+            echo '      <img src="assets/logo.png" alt="marimo Logo" class="logo">'
+            echo '      <h1>🚀 marimo WebAssembly + GitHub Pages Template</h1>'
+            echo '      <p class="subtitle">Interactive Python notebooks exported to WebAssembly and deployed to GitHub Pages</p>'
+            echo '      <div class="badges">'
+            echo '        <img src="https://img.shields.io/badge/python-3.12+-blue.svg" alt="Python 3.12+">'
+            echo '        <img src="https://img.shields.io/badge/marimo-0.13.15+-orange.svg" alt="Marimo">'
+            echo '        <img src="https://img.shields.io/badge/GitHub%20Pages-Deployed-green?logo=github" alt="GitHub Pages">'
+            echo '      </div>'
+            echo '    </div>'
+            echo '  </header>'
+
+            echo '  <main class="container">'
+
+            echo '    <h2 class="section-title"><i class="fas fa-book"></i> Notebooks</h2>'
+            echo '    <p style="text-align: center;">Interactive notebooks in edit mode - you can modify and experiment with the code</p>'
+            echo '    <div class="cards">'
+
+            # Generate cards for notebooks
+            echo "      <!-- Fibonacci Notebook -->"
+            echo "      <div class=\"card\">"
+            echo "        <div class=\"card-header\">fibonacci</div>"
+            echo "        <div class=\"card-body\">"
+            echo "          <p class=\"card-description\">Interactive Fibonacci sequence calculator with a slider to adjust the number of sequence elements.</p>"
+            echo "          <a href=\"notebooks/fibonacci/index.html\" class=\"card-link\">Open Notebook <i class=\"fas fa-arrow-right\"></i></a>"
+            echo "        </div>"
+            echo "      </div>"
+
+            echo "      <!-- Penguins Notebook -->"
+            echo "      <div class=\"card\">"
+            echo "        <div class=\"card-header\">penguins</div>"
+            echo "        <div class=\"card-body\">"
+            echo "          <p class=\"card-description\">Interactive data analysis of the Palmer Penguins dataset using Polars and marimo.</p>"
+            echo "          <a href=\"notebooks/penguins/index.html\" class=\"card-link\">Open Notebook <i class=\"fas fa-arrow-right\"></i></a>"
+            echo "        </div>"
+            echo "      </div>"
+
+            # Add any other notebooks dynamically
             for dir in _site/notebooks/*/; do
               name=$(basename "$dir")
-              echo "<li><a href=\"notebooks/$name/index.html\">$name</a></li>"
+              if [[ "$name" != "fibonacci" && "$name" != "penguins" ]]; then
+                echo "      <div class=\"card\">"
+                echo "        <div class=\"card-header\">$name</div>"
+                echo "        <div class=\"card-body\">"
+                echo "          <p class=\"card-description\">Interactive marimo notebook.</p>"
+                echo "          <a href=\"notebooks/$name/index.html\" class=\"card-link\">Open Notebook <i class=\"fas fa-arrow-right\"></i></a>"
+                echo "        </div>"
+                echo "      </div>"
+              fi
             done
-            echo "</ul>"   
-          
-          
-            echo "<h1>Apps</h1><ul>"
+
+            echo '    </div>'
+
+            echo '    <h2 class="section-title"><i class="fas fa-chart-line"></i> Apps</h2>'
+            echo '    <p style="text-align: center;">Interactive applications in run mode - code is hidden for a clean user interface</p>'
+            echo '    <div class="cards">'
+
+            # Generate cards for apps
+            echo "      <!-- Charts App -->"
+            echo "      <div class=\"card\">"
+            echo "        <div class=\"card-header app\">charts</div>"
+            echo "        <div class=\"card-body\">"
+            echo "          <p class=\"card-description\">Interactive data visualization dashboard with Altair charts.</p>"
+            echo "          <a href=\"apps/charts/index.html\" class=\"card-link app\">Open App <i class=\"fas fa-arrow-right\"></i></a>"
+            echo "        </div>"
+            echo "      </div>"
+
+            # Add any other apps dynamically
             for dir in _site/apps/*/; do
               name=$(basename "$dir")
-              echo "<li><a href=\"apps/$name/index.html\">$name</a></li>"
+              if [[ "$name" != "charts" ]]; then
+                echo "      <div class=\"card\">"
+                echo "        <div class=\"card-header app\">$name</div>"
+                echo "        <div class=\"card-body\">"
+                echo "          <p class=\"card-description\">Interactive marimo application.</p>"
+                echo "          <a href=\"apps/$name/index.html\" class=\"card-link app\">Open App <i class=\"fas fa-arrow-right\"></i></a>"
+                echo "        </div>"
+                echo "      </div>"
+              fi
             done
-            echo "</ul>"
-            
-            echo "</body></html>"          
+
+            echo '    </div>'
+            echo '  </main>'
+
+            echo '  <footer>'
+            echo '    <div class="footer-content">'
+            echo '      <p>Built with <a href="https://marimo.io" target="_blank" style="color: #ff9900;">marimo</a> - Interactive Python notebooks</p>'
+            echo '      <div class="footer-links">'
+            echo '        <a href="https://github.com/marimo-team/marimo" target="_blank"><i class="fab fa-github"></i> GitHub</a>'
+            echo '        <a href="https://docs.marimo.io" target="_blank"><i class="fas fa-book"></i> Documentation</a>'
+            echo '        <a href="https://discord.gg/JE7nhX6mD8" target="_blank"><i class="fab fa-discord"></i> Discord</a>'
+            echo '      </div>'
+            echo '      <p>Licensed under <a href="https://github.com/marimo-team/marimo/blob/main/LICENSE" target="_blank" style="color: #4a86e8;">Apache License 2.0</a></p>'
+            echo '    </div>'
+            echo '  </footer>'
+
+            echo '</body>'
+            echo '</html>'
           } > _site/index.html
 
       - name: Display index
@@ -106,7 +364,7 @@ jobs:
         with:
           path: _site  # Directory containing the built site
 
-   
+
 
   # The deploy job publishes the built site to GitHub Pages
   deploy:
