@@ -70,7 +70,7 @@ jobs:
       # Run the build script to export notebooks to WebAssembly
       - name: 🛠️ Check notebooks
         run: |
-          tree _site/notebooks
+          tree _site
 
       - name: Generate index.html
         run: |
@@ -83,14 +83,17 @@ jobs:
               name=$(basename "$dir")
               echo "<li><a href=\"notebooks/$name/index.html\">$name</a></li>"
             done
+            echo "</ul>"   
+          
           
             echo "<h1>Apps</h1><ul>"
             for dir in _site/apps/*/; do
               name=$(basename "$dir")
               echo "<li><a href=\"apps/$name/index.html\">$name</a></li>"
             done
-          
-            echo "</ul></body></html>"          
+            echo "</ul>"
+            
+            echo "</body></html>"          
           } > _site/index.html
 
       - name: Display index
