@@ -93,6 +93,25 @@ jobs:
           done > subfolders.txt
           cat subfolders.txt
 
+      - name: Generate index.html
+        run: |
+          {
+            echo "<!DOCTYPE html>"
+            echo "<html><head><meta charset='UTF-8'><title>Index</title></head><body>"
+            echo "<h1>Index of _site/notebooks</h1><ul>"
+            for dir in _site/notebooks/*/; do
+              name=$(basename "$dir")
+              echo "<li><a href=\"_site/notebooks/$name/index.html\">$name</a></li>"
+            done
+            echo "</ul></body></html>"
+          } > _site/notebooks/index.html
+
+      - name: Display index
+        run: |
+          cat _site/notebooks/index.html
+
+   
+
   # The deploy job publishes the built site to GitHub Pages
   deploy:
     needs: build  # This job depends on the build job completing successfully
