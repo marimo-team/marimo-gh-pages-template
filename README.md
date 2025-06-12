@@ -49,11 +49,16 @@ This project uses [uv](https://github.com/astral-sh/uv) for package management. 
 make uv
 
 # Run a specific notebook in edit mode
-make notebooks NOTEBOOK=fibonacci
+make notebook NOTEBOOK=fibonacci
 
 # Run a specific app in edit mode
-make apps APPS=charts
+make app APP=charts
+
+# Build the entire website locally (dry run)
+make dryrun
 ```
+
+The `dryrun` command builds the entire website locally using the same process as the CI/CD pipeline but publishes it to a local `_site` folder instead of deploying to GitHub Pages. This is useful for previewing the complete website before pushing changes.
 
 ### Creating New Notebooks
 
