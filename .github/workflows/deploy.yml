@@ -80,7 +80,7 @@ jobs:
             echo "<h1>Index of _site/notebooks</h1><ul>"
             for dir in _site/notebooks/*/; do
               name=$(basename "$dir")
-              echo "<li><a href=\"_site/notebooks/$name/index.html\">$name</a></li>"
+              echo "<li><a href=\"$name/index.html\">$name</a></li>"
             done
             echo "</ul></body></html>"
           } > _site/notebooks/index.html
