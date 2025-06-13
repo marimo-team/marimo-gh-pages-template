@@ -12,14 +12,21 @@ The script can be run from the command line with optional arguments:
 The exported files will be placed in the specified output directory (default: _site).
 """
 
-import os
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "jinja2==3.1.3"
+# ]
+# ///
+
 import subprocess
 import argparse
-from typing import List, Optional, Dict, Any, Union
+from typing import List
 from pathlib import Path
+import jinja2
 
 
-def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) -> bool:
+def export_html_wasm(notebook_path: Path, output_dir: Path, as_app: bool = False) -> bool:
     """Export a single marimo notebook to HTML/WebAssembly format.
 
     This function takes a marimo notebook (.py file) and exports it to HTML/WebAssembly format.
@@ -27,8 +34,8 @@ def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) 
     applications. Otherwise, it's exported in "edit" mode, suitable for interactive notebooks.
 
     Args:
-        notebook_path (str): Path to the marimo notebook (.py file) to export
-        output_dir (str): Directory where the exported HTML file will be saved
+        notebook_path (Path): Path to the marimo notebook (.py file) to export
+        output_dir (Path): Directory where the exported HTML file will be saved
         as_app (bool, optional): Whether to export as an app (run mode) or notebook (edit mode).
                                 Defaults to False.
 
@@ -36,7 +43,7 @@ def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) 
         bool: True if export succeeded, False otherwise
     """
     # Convert .py extension to .html for the output file
-    output_path: str = notebook_path.replace(".py", ".html")
+    output_path: Path = notebook_path.with_suffix(".html")
 
     # Base command for marimo export
     cmd: List[str] = ["uvx", "marimo", "export", "html-wasm", "--sandbox"]
@@ -51,11 +58,11 @@ def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) 
 
     try:
         # Create full output path and ensure directory exists
-        output_file: str = os.path.join(output_dir, output_path)
-        os.makedirs(os.path.dirname(output_file), exist_ok=True)
+        output_file: Path = output_dir / notebook_path.with_suffix(".html")
+        output_file.parent.mkdir(parents=True, exist_ok=True)
 
         # Add notebook path and output file to command
-        cmd.extend([notebook_path, "-o", output_file])
+        cmd.extend([str(notebook_path), "-o", str(output_file)])
 
         # Run marimo export command
         print(cmd)
@@ -72,7 +79,7 @@ def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) 
         return False
 
 
-def generate_index(all_notebooks: List[str], output_dir: str) -> None:
+def generate_index(all_notebooks: List[Path], output_dir: Path) -> None:
     """Generate an index.html file that lists all the notebooks.
 
     This function creates an HTML index page that displays links to all the exported
@@ -80,8 +87,8 @@ def generate_index(all_notebooks: List[str], output_dir: str) -> None:
     with a formatted title and a link to open it.
 
     Args:
-        all_notebooks (List[str]): List of paths to all the notebooks
-        output_dir (str): Directory where the index.html file will be saved
+        all_notebooks (List[Path]): List of paths to all the notebooks
+        output_dir (Path): Directory where the index.html file will be saved
 
     Returns:
         None
@@ -89,57 +96,52 @@ def generate_index(all_notebooks: List[str], output_dir: str) -> None:
     print("Generating index.html")
 
     # Create the full path for the index.html file
-    index_path: str = os.path.join(output_dir, "index.html")
+    index_path: Path = output_dir / "index.html"
 
     # Ensure the output directory exists
-    os.makedirs(output_dir, exist_ok=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    #os.makedirs(output_dir, exist_ok=True)
 
     try:
-        # Open the index.html file for writing
+        # Set up Jinja2 environment
+        template_dir = Path(__file__).parent / "templates"
+            #os.path.join(os.path.dirname(__file__), "templates"))
+        env = jinja2.Environment(
+            loader=jinja2.FileSystemLoader(template_dir),
+            autoescape=jinja2.select_autoescape(["html", "xml"])
+        )
+
+        # Load the template
+        template = env.get_template("index.html.j2")
+
+        # Prepare notebook data for the template
+        notebooks_data = []
+        for notebook in all_notebooks:
+            # Extract the notebook name from the path and remove the .py extension
+            notebook_name: str = notebook.stem
+
+            # Format the display name by replacing underscores with spaces and capitalizing
+            display_name: str = notebook_name.replace("_", " ").title()
+
+            # Add notebook data to the list
+            notebooks_data.append({
+                "display_name": display_name,
+                "html_path": str(notebook.with_suffix(".html"))
+            })
+
+        # Render the template with notebook data
+        rendered_html = template.render(notebooks=notebooks_data)
+
+        # Write the rendered HTML to the index.html file
         with open(index_path, "w") as f:
-            # Write the HTML header and page structure
-            f.write(
-                """<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>marimo</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  </head>
-  <body class="font-sans max-w-2xl mx-auto p-8 leading-relaxed">
-    <div class="mb-8">
-      <img src="https://raw.githubusercontent.com/marimo-team/marimo/main/docs/_static/marimo-logotype-thick.svg" alt="marimo" class="h-20" />
-    </div>
-    <div class="grid gap-4">
-"""
-            )
-            # Process each notebook and create a card for it
-            for notebook in all_notebooks:
-                # Extract the notebook name from the path and remove the .py extension
-                notebook_name: str = notebook.split("/")[-1].replace(".py", "")
+            f.write(rendered_html)
 
-                # Format the display name by replacing underscores with spaces and capitalizing
-                display_name: str = notebook_name.replace("_", " ").title()
-
-                # Write the HTML for the notebook card
-                f.write(
-                    f'      <div class="p-4 border border-gray-200 rounded">\n'
-                    f'        <h3 class="text-lg font-semibold mb-2">{display_name}</h3>\n'
-                    f'        <div class="flex gap-2">\n'
-                    f'          <a href="{notebook.replace(".py", ".html")}" class="px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded">Open Notebook</a>\n'
-                    f"        </div>\n"
-                    f"      </div>\n"
-                )
-            # Write the HTML footer
-            f.write(
-                """    </div>
-  </body>
-</html>"""
-            )
     except IOError as e:
         # Handle file I/O errors
         print(f"Error generating index.html: {e}")
+    except jinja2.exceptions.TemplateError as e:
+        # Handle template errors
+        print(f"Error rendering template: {e}")
 
 
 def main() -> None:
@@ -164,8 +166,11 @@ def main() -> None:
     )
     args: argparse.Namespace = parser.parse_args()
 
+    # Convert output_dir to Path
+    output_dir: Path = Path(args.output_dir)
+
     # Initialize empty list to store all notebook paths
-    all_notebooks: List[str] = []
+    all_notebooks: List[Path] = []
 
     # Look for notebooks in both the notebooks/ and apps/ directories
     for directory in ["notebooks", "apps"]:
@@ -175,7 +180,7 @@ def main() -> None:
             continue
 
         # Find all Python files recursively in the directory
-        all_notebooks.extend(str(path) for path in dir_path.rglob("*.py"))
+        all_notebooks.extend(path for path in dir_path.rglob("*.py"))
 
     # Exit if no notebooks were found
     if not all_notebooks:
@@ -186,10 +191,10 @@ def main() -> None:
     # Files in the apps/ directory are exported as apps (run mode)
     # Files in the notebooks/ directory are exported as notebooks (edit mode)
     for nb in all_notebooks:
-        export_html_wasm(nb, args.output_dir, as_app=nb.startswith("apps/"))
+        export_html_wasm(nb, output_dir, as_app=str(nb).startswith("apps/"))
 
     # Generate the index.html file that lists all notebooks
-    generate_index(all_notebooks, args.output_dir)
+    generate_index(all_notebooks, output_dir)
 
 
 if __name__ == "__main__":

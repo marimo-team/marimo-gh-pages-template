@@ -30,22 +30,10 @@ jobs:
       - name: 🚀 Install uv
         uses: astral-sh/setup-uv@v6
 
-      # Set up Python environment (obsolete as done by the setup-uv step)?
-      #- name: 🐍 Set up Python
-      #  uses: actions/setup-python@v5
-      #  with:
-      #    python-version: 3.12  # Use Python 3.12 for the build
-
-
-      # Install marimo and other required dependencies
-      #- name: 📦 Install dependencies
-      #  run: |
-      #    uv pip install marimo
-
       # Run the build script to export notebooks to WebAssembly
       - name: 🛠️ Export notebooks
         run: |
-          python .github/scripts/build.py  # This script exports all notebooks to the _site directory
+          uv run .github/scripts/build.py  # This script exports all notebooks to the _site directory
           tree _site                       # Display the exported files
     
       # Upload the generated site as an artifact for the deploy job
