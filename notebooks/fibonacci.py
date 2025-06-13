@@ -1,11 +1,19 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo==0.13.15",
+# ]
+# ///
 import marimo
 
 __generated_with = "0.10.6"
 app = marimo.App()
 
-
+with app.setup:
+    import marimo as mo
+    
 @app.cell
-def _(mo):
+def _():
     mo.md(
         r"""
         # Fibonacci Calculator
@@ -17,37 +25,25 @@ def _(mo):
 
 
 @app.cell
-def _(mo):
+def _():
     # Create an interactive slider
     n = mo.ui.slider(1, 100, value=50, label="Number of Fibonacci numbers")
     n
-    return (n,)
+    return n
 
 
 @app.cell
-def _(fibonacci, mo, n):
+def _(n):
     fib = fibonacci(n.value)
     mo.md(", ".join([str(f) for f in fib]))
-    return (fib,)
-
-
-@app.cell
-def _():
-    # Generate Fibonacci sequence
-    def fibonacci(n):
-        sequence = [0, 1]
-        for i in range(2, n):
-            sequence.append(sequence[i - 1] + sequence[i - 2])
-        return sequence
-    return (fibonacci,)
-
-
-@app.cell
-def _():
-    import numpy as np
-    import marimo as mo
-    return mo, np
-
+    
+@app.function
+def fibonacci(n):
+    sequence = [0, 1]
+    for i in range(2, n):
+        sequence.append(sequence[i - 1] + sequence[i - 2])
+    return sequence
+    
 
 if __name__ == "__main__":
     app.run()

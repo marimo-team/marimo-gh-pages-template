@@ -1,19 +1,27 @@
+# /// script
+# requires-python = ">=3.12"
+# dependencies = [
+#     "marimo==0.13.15",
+#     "polars==1.30.0",
+#     "altair==4.2.0",
+#     "pandas==2.3.0",
+# ]
+# ///
 import marimo
 
-__generated_with = "0.10.9"
+__generated_with = "0.13.5"
 app = marimo.App(width="medium")
 
-
-@app.cell
-def _():
-    import polars as pl
+with app.setup:
     import marimo as mo
+    import polars as pl
     import altair as alt
-    return alt, mo, pl
+    import pandas as pd
 
+    file = mo.notebook_location() / "public" / "penguins.csv"
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(
         """
         # Palmer Penguins Analysis
@@ -25,15 +33,20 @@ def _(mo):
 
 
 @app.cell
-def _(mo, pl):
+def _():
     # Read the penguins dataset
-    df = pl.read_csv(str(mo.notebook_location() / "public" / "penguins.csv"))
+    df = pl.read_csv(str(file))
     df.head()
     return (df,)
 
+@app.cell
+def _():
+    # Try to avoid reading the file with pandas
+    _df = pd.read_csv(str(file))
+    return
 
 @app.cell
-def _(df, mo):
+def _(df):
     # Basic statistics
     mo.md(f"""
     ### Dataset Overview
@@ -49,13 +62,13 @@ def _(df, mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(r"""### Species Distribution""")
     return
 
 
 @app.cell
-def _(alt, df, mo):
+def _(df):
     # Create species distribution chart
     species_chart = mo.ui.altair_chart(
         alt.Chart(df)
@@ -70,13 +83,13 @@ def _(alt, df, mo):
 
 
 @app.cell(hide_code=True)
-def _(mo):
+def _():
     mo.md(r"""### Bill Dimensions Analysis""")
     return
 
 
 @app.cell
-def _(alt, df, mo):
+def _(df):
     # Scatter plot of bill dimensions
     scatter = mo.ui.altair_chart(
         alt.Chart(df)
