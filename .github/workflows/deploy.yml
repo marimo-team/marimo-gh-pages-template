@@ -31,16 +31,16 @@ jobs:
         uses: astral-sh/setup-uv@v6
 
       # Set up Python environment (obsolete as done by the setup-uv step)?
-      - name: 🐍 Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.12  # Use Python 3.12 for the build
+      #- name: 🐍 Set up Python
+      #  uses: actions/setup-python@v5
+      #  with:
+      #    python-version: 3.12  # Use Python 3.12 for the build
 
 
       # Install marimo and other required dependencies
-      - name: 📦 Install dependencies
-        run: |
-          uv pip install marimo
+      #- name: 📦 Install dependencies
+      #  run: |
+      #    uv pip install marimo
 
       # Run the build script to export notebooks to WebAssembly
       - name: 🛠️ Export notebooks
