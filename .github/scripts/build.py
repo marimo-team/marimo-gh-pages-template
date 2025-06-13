@@ -39,7 +39,7 @@ def export_html_wasm(notebook_path: str, output_dir: str, as_app: bool = False) 
     output_path: str = notebook_path.replace(".py", ".html")
 
     # Base command for marimo export
-    cmd: List[str] = ["marimo", "export", "html-wasm"]
+    cmd: List[str] = ["marimo", "export", "html-wasm", "--sandbox"]
 
     # Configure export mode based on whether it's an app or a notebook
     if as_app:
