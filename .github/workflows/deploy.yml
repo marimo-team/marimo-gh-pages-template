@@ -46,7 +46,8 @@ jobs:
       - name: 🛠️ Export notebooks
         run: |
           python .github/scripts/build.py  # This script exports all notebooks to the _site directory
-
+          tree .site                       # Display the exported files
+    
       # Upload the generated site as an artifact for the deploy job
       - name: 📤 Upload artifact
         uses: actions/upload-pages-artifact@v3
