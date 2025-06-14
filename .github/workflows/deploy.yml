@@ -33,6 +33,10 @@ jobs:
       # Run the build script to export notebooks to WebAssembly
       - name: 🛠️ Export notebooks
         run: |
+          # todo: Ultimately this function should not be part of this repo
+          # It should very much be an action such that other repos
+          # can use it without forking or copying it
+          # No, it should not be an action. As otherwise can't run before push
           uv run .github/scripts/build.py  # This script exports all notebooks to the _site directory
           tree _site                       # Display the exported files
     
