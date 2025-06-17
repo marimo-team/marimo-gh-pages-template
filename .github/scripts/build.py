@@ -29,14 +29,6 @@ import fire
 
 from loguru import logger
 
-# Configure logging
-# logging.basicConfig(
-#    level=logging.INFO,
-#    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-#    datefmt='%Y-%m-%d %H:%M:%S'
-# )
-# logger = logging.getLogger("marimo-build")
-
 def _export_html_wasm(notebook_path: Path, output_dir: Path, as_app: bool = False) -> bool:
     """Export a single marimo notebook to HTML/WebAssembly format.
 
@@ -185,7 +177,7 @@ def _export(folder: Path, output_dir: Path, as_app: bool=False) -> List[dict]:
 
 def main(
     output_dir: Union[str, Path] = "_site",
-    template: Union[str, Path] = "templates/index.html.j2",
+    template: Union[str, Path] = "templates/tailwind.html.j2",
 ) -> None:
     """Main function to export marimo notebooks.
 

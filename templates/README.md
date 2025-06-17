@@ -36,7 +36,7 @@ Templates receive the following variables from the build script:
 A complete template should include:
 
 1. **Conditional Notebook Section**: Only display if notebooks exist
-   
+
    ```jinja
    {% if notebooks %}
    <h2>Notebooks</h2>
@@ -52,7 +52,7 @@ A complete template should include:
    ```
 
 2. **Conditional App Section**: Only display if apps exist
-   
+
    ```jinja
    {% if apps %}
    <h2>Apps</h2>
@@ -77,14 +77,16 @@ uv run .github/scripts/build.py --output-dir _site --template templates/your-cus
 
 ## Example Templates
 
-This repository includes two example templates:
+This repository includes three example templates:
 
-1. `bare.html.j2`: A minimal template with basic styling
-2. `index.html.j2`: The default template with more styling and a footer
+1. `index.html.j2`: A less lean template with more styling and a footer
+2. `tailwind.html.j2`: A minimal and lean template using Tailwind CSS
 
 ## Best Practices
 
-1. **Styling**: Include CSS directly in the template using `<style>` tags for simplicity
+1. **Styling**: 
+   - Include CSS directly in the template using `<style>` tags for simplicity, or
+   - Use Tailwind CSS via CDN for a utility-first approach without custom CSS
 2. **Responsive Design**: Ensure the template works well on different screen sizes
 3. **Conditional Sections**: Use `{% if %}` blocks to conditionally display sections based on data availability
 4. **Comments**: Include comments in your template to explain complex sections

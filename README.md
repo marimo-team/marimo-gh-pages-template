@@ -35,6 +35,22 @@ import polars as pl
 df = pl.read_csv(mo.notebook_location() / "public" / "penguins.csv")
 ```
 
+## 🎨 Templates
+
+This repository includes several templates for the generated site:
+
+1. `index.html.j2` (default): A template with styling and a footer
+2. `bare.html.j2`: A minimal template with basic styling
+3. `tailwind.html.j2`: A minimal and lean template using Tailwind CSS
+
+To use a specific template, pass the `--template` parameter to the build script:
+
+```bash
+uv run .github/scripts/build.py --template templates/tailwind.html.j2
+```
+
+You can also create your own custom templates. See the [templates/README.md](templates/README.md) for more information.
+
 ## 🧪 Testing
 
 To test the export process, run `.github/scripts/build.py` from the root directory.
