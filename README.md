@@ -12,13 +12,19 @@ This template repository demonstrates how to export [marimo](https://marimo.io) 
 
 1. Fork this repository
 2. Add your marimo files to the `notebooks/` or `apps/` directory
-   1. `notebooks/` notebooks are exported with `--mode edit`
-   2. `apps/` notebooks are exported with `--mode run`
 3. Push to main branch
 4. Go to repository **Settings > Pages** and change the "Source" dropdown to "GitHub Actions"
 5. GitHub Actions will automatically build and deploy to Pages
 
-## Including data or assets
+## 📦 Export Types
+
+This template supports three types of exports:
+
+1. **Notebooks** (`notebooks/` directory): Exported in edit mode, allowing users to modify and experiment with the code
+2. **WebAssembly Notebooks** (`notebooks/` directory): The same notebooks exported to WebAssembly for fully interactive use in the browser
+3. **Apps** (`apps/` directory): Exported in run mode, where code is hidden for a clean user interface
+
+## 📂 Including data or assets
 
 To include data or assets in your notebooks, add them to the `public/` directory.
 
@@ -37,29 +43,31 @@ df = pl.read_csv(mo.notebook_location() / "public" / "penguins.csv")
 
 ## 🎨 Templates
 
-This repository includes several templates for the generated site:
+This repository includes two templates for the generated site:
 
-1. `index.html.j2` (default): A template with styling and a footer
-2. `bare.html.j2`: A minimal template with basic styling
-3. `tailwind.html.j2`: A minimal and lean template using Tailwind CSS
+1. `tailwind.html.j2`: A minimal and lean template using Tailwind CSS
 
-To use a specific template, pass the `--template` parameter to the build script:
-
-```bash
-uv run .github/scripts/build.py --template templates/tailwind.html.j2
-```
+The templates are used by the GitHub Actions workflow to generate the index page. You can specify which template to use by modifying the `template` parameter in the `.github/workflows/deploy.yml` file.
 
 You can also create your own custom templates. See the [templates/README.md](templates/README.md) for more information.
 
-## 🧪 Testing
+## 🔄 GitHub Actions Workflow
 
-To test the export process, run `.github/scripts/build.py` from the root directory.
+The repository includes a GitHub Actions workflow (`.github/workflows/deploy.yml`) that automatically builds and deploys the site to GitHub Pages when changes are pushed to the main branch.
 
-```bash
-uv run .github/scripts/build.py
-```
+The workflow:
 
-This will export all notebooks in a folder called `_site/` in the root directory. Then to serve the site, run:
+1. Checks out the repository code
+2. Uses the [marimushka](https://github.com/jebel-quant/marimushka)
+action to export notebooks and build the index page
+3. Publishes the generated site to GitHub Pages
+
+You can also trigger the workflow manually from the Actions tab in your repository.
+
+## 🧪 Testing Locally
+
+To test the site locally, you can serve the generated `_site/` directory 
+using Python's built-in HTTP server:
 
 ```bash
 python -m http.server -d _site

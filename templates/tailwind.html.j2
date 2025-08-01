@@ -19,7 +19,7 @@
     <main>
       {% if notebooks %}
       <h2 class="text-xl font-bold text-center my-4">Notebooks</h2>
-      <p class="text-center mb-4">Interactive notebooks in edit mode - you can modify and experiment with the code</p>
+      <p class="text-center mb-4">Static notebooks - you can watch but not touch</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
         {% for notebook in notebooks %}
         <!-- {{ notebook.display_name }} Notebook -->
@@ -27,6 +27,22 @@
           <div class="bg-gray-200 p-3 font-semibold">{{ notebook.display_name }}</div>
           <div class="p-4">
             <a href="{{ notebook.html_path }}" class="inline-block bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded transition-colors">Open Notebook</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if notebooks_wasm %}
+      <h2 class="text-xl font-bold text-center my-4">WebAssembly Notebooks</h2>
+      <p class="text-center mb-4">Interactive notebooks exported to WebAssembly - fully interactive in the browser</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+        {% for notebook in notebooks_wasm %}
+        <!-- {{ notebook.display_name }} WebAssembly Notebook -->
+        <div class="bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+          <div class="bg-indigo-100 p-3 font-semibold">{{ notebook.display_name }}</div>
+          <div class="p-4">
+            <a href="{{ notebook.html_path }}" class="inline-block bg-indigo-500 hover:bg-indigo-600 text-white py-1 px-3 rounded transition-colors">Open WebAssembly Notebook</a>
           </div>
         </div>
         {% endfor %}

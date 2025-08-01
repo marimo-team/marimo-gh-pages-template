@@ -1,68 +1,61 @@
 # This workflow builds and deploys marimo notebooks to GitHub Pages
 # It runs automatically when changes are pushed to the main branch or can be triggered manually
+# The workflow converts Python notebooks to WebAssembly for interactive web experiences
 
 name: Deploy to GitHub Pages
 
 # Defines when the workflow will run
 on:
   push:
-    branches: ['main']  # Trigger on pushes to main branch
-  workflow_dispatch:    # Allow manual triggering from the GitHub UI
+    branches: ['main']  # Trigger on pushes to main branch - automatic deployment
+  workflow_dispatch:    # Allow manual triggering from the GitHub UI - for on-demand builds
 
-# Concurrency settings to manage multiple workflow runs
-concurrency:
-  group: 'pages'             # Only one workflow in the 'pages' group can run at a time
-  cancel-in-progress: false  # Don't cancel in-progress runs when a new one is triggered
-
-# Environment variables used by the workflow
-env:
-  UV_SYSTEM_PYTHON: 1   # Use system Python with uv package manager
-
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # The build job exports marimo notebooks to static HTML/WebAssembly
+  # This job handles the entire process from checkout to deployment
+  
   build:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
-    steps:
-      # Check out the repository code
-      - uses: actions/checkout@v4
+    runs-on: ubuntu-latest  # Use the latest Ubuntu runner for better compatibility and security
 
-      # Install uv package manager for faster Python package installation
-      - name: 🚀 Install uv
-        uses: astral-sh/setup-uv@v6
-
-      # Run the build script to export notebooks to WebAssembly
-      - name: 🛠️ Export notebooks
-        run: |
-          # todo: Ultimately this function should not be part of this repo
-          # It should very much be an action such that other repos
-          # can use it without forking or copying it
-          # No, it should not be an action. As otherwise can't run before push
-          uv run .github/scripts/build.py  # This script exports all notebooks to the _site directory
-          tree _site                       # Display the exported files
-    
-      # Upload the generated site as an artifact for the deploy job
-      - name: 📤 Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site  # Directory containing the built site
-
-  # The deploy job publishes the built site to GitHub Pages
-  deploy:
-    needs: build  # This job depends on the build job completing successfully
-
-    # Required permissions for the GitHub Pages deployment
-    permissions:
-      pages: write      # Permission to deploy to Pages
-      id-token: write   # Permission to verify the deployment
-
-    # Configure the deployment environment
     environment:
-      name: github-pages                             # Deploy to the github-pages environment
-      url: ${{ steps.deployment.outputs.page_url }}  # Use the URL from the deployment step
+      name: github-pages
 
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    permissions:
+      pages: write
+      id-token: write
+    
     steps:
-      # Deploy the site to GitHub Pages using the official action
-      - name: 🚀 Deploy to GitHub Pages
-        id: deployment                 # ID used to reference this step's outputs
-        uses: actions/deploy-pages@v4  # GitHub's official Pages deployment action
+      # Check out the repository code to access notebooks and configuration
+      # This step uses GitHub's official checkout action to clone the repository
+      - uses: actions/checkout@v4  # v4 is the latest version as of this workflow creation
+
+      # This step exports the marimo notebooks to static HTML/WebAssembly and builds the index page
+      # It uses the marimushka action which is a specialized tool for marimo notebook deployment
+      - name: Export notebooks and build index.html
+        uses: jebel-quant/marimushka@v0.1.1  # Using a specific version for stability
+        with:
+          # Configuration parameters for the export process:
+          apps: 'apps'                 # Directory containing app notebooks (exported in run mode)
+          notebooks: 'notebooks'       # Directory containing regular notebooks (exported as static HTML files)
+          notebooks_wasm: 'notebooks'  # Directory containing notebooks for interactive use
+
+          template: 'templates/tailwind.html.j2'  # Custom template for the index page using Tailwind CSS
+
+
+      - name: Inspect artifacts folder
+        shell: bash
+        run: |
+          tree artifacts
+
+        # Package all artifacts for GitHub Pages deployment
+        # This prepares the combined outputs for deployment
+      - name: Upload static files as artifact
+        id: upload
+        uses: actions/upload-pages-artifact@v3 # or specific "vX.X.X" version tag for this action
+        with:
+          path: artifacts/marimushka  # Path to the directory containing all artifacts
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
