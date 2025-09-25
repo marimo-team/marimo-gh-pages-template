@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
     steps:
       # Check out the repository code
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       # Install uv package manager for faster Python package installation
       - name: 🚀 Install uv
