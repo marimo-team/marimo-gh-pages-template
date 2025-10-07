@@ -28,7 +28,7 @@ jobs:
 
       # Install uv package manager for faster Python package installation
       - name: 🚀 Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v7
 
       # Run the build script to export notebooks to WebAssembly
       - name: 🛠️ Export notebooks
