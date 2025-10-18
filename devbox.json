@@ -1,0 +1,13 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
+  "packages": ["uv@latest", "python@latest"],
+  "shell": {
+    "init_hook": [". $VENV_DIR/bin/activate"],
+    "scripts": {
+      "build": [
+        "uv run build.py --output_dir '_site' --template 'templates/tailwind.html.j2'"
+      ],
+      "serve": ["python -m http.server -d _site"]
+    }
+  }
+}

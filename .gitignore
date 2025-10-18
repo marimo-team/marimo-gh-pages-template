@@ -177,3 +177,7 @@ cython_debug/
 .DS_Store
 .marimo
 test/
+
+.devbox
+# enforcing strict reproducibility not suitable for template
+devbox.lock
