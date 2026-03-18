@@ -1,5 +1,6 @@
 {
   "extends": [
+    "local>marimo-team/.github:renovate-config",
     "config:recommended",
     ":enablePreCommit",
     ":dependencyDashboard",
