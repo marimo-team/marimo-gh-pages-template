@@ -24,11 +24,11 @@ jobs:
     runs-on: ubuntu-latest  # Use the latest Ubuntu runner
     steps:
       # Check out the repository code
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       # Install uv package manager for faster Python package installation
       - name: 🚀 Install uv
-        uses: astral-sh/setup-uv@v7
+        uses: astral-sh/setup-uv@37802adc94f370d6bfd71619e3f0bf239e1f3b78 # v7
 
       # Run the build script to export notebooks to WebAssembly
       - name: 🛠️ Export notebooks
@@ -42,7 +42,7 @@ jobs:
     
       # Upload the generated site as an artifact for the deploy job
       - name: 📤 Upload artifact
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: _site  # Directory containing the built site
 
@@ -65,4 +65,4 @@ jobs:
       # Deploy the site to GitHub Pages using the official action
       - name: 🚀 Deploy to GitHub Pages
         id: deployment                 # ID used to reference this step's outputs
-        uses: actions/deploy-pages@v4  # GitHub's official Pages deployment action
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4  # GitHub's official Pages deployment action
