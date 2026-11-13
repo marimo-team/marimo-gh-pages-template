@@ -21,7 +21,7 @@ env:
 jobs:
   # The build job exports marimo notebooks to static HTML/WebAssembly
   build:
-    runs-on: ubuntu-p-small  # Use the latest Ubuntu runner
+    runs-on: "${{ vars.CI_RUNNER_SMALL || 'ubuntu-latest' }}"  # Use the latest Ubuntu runner
     steps:
       # Check out the repository code
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
@@ -60,7 +60,7 @@ jobs:
       name: github-pages                             # Deploy to the github-pages environment
       url: ${{ steps.deployment.outputs.page_url }}  # Use the URL from the deployment step
 
-    runs-on: ubuntu-p-small  # Use the latest Ubuntu runner
+    runs-on: "${{ vars.CI_RUNNER_SMALL || 'ubuntu-latest' }}"  # Use the latest Ubuntu runner
     steps:
       # Deploy the site to GitHub Pages using the official action
       - name: 🚀 Deploy to GitHub Pages
